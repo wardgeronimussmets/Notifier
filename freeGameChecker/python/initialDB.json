@@ -1,0 +1,27 @@
+{
+  "users": {
+    "1": {
+      "name" : "Markel"
+    },
+    "2": {
+      "name" : "Mark"
+    }
+  },
+  "deals":{
+    "9201":{
+      "category" : "Steam",
+      "body" : "Test Body",
+      "link" : "https://www.youtube.com/watch?v=ran_Ylug7AE&t=199s"
+    }
+  },
+  "unseenDeals":{
+    "0001":{
+      "userId" : "1",
+      "dealId" : "9201"
+    },
+    "0002":{
+      "userId" : "2",
+      "dealId" : "9201"
+    }
+  }
+}
