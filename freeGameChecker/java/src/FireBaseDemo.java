@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FireBaseDemo {
+    private static volatile boolean notCompletedYet = true;
     public static void main(String[] args) {
+
         try {
             // Fetch the service account key JSON file contents
             FileInputStream serviceAccount = new FileInputStream("privateKeyFirebase.json");
@@ -32,12 +34,24 @@ public class FireBaseDemo {
                     System.out.println("Cancelled");
                 }
             });
+
+            //writing to the database
+            FirebaseDatabase.getInstance().getReference().child("testing").push().child("Name").setValue("Hopelijk de naams", new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    System.out.println("completed" + databaseError + databaseReference);
+                    notCompletedYet = false;
+                }
+            });
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        while(true){
+        while(notCompletedYet){
 
         }
     }
 }
+
+
+//get notified on change -> usefull in the app //https://www.youtube.com/watch?v=XactTKR0Wfc

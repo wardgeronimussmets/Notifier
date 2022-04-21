@@ -1,3 +1,5 @@
 # Default ignored files
 .idea
 out
+src/META_INF
+/src/META-INF/
