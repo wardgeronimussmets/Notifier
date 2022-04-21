@@ -1,15 +1,11 @@
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -32,24 +28,22 @@ public class FireBaseManager {
             e.printStackTrace();
         }
     }
-    private HashMap<String,Object> getNewMap(){
-        HashMap<String,Object> mapTemplate = new HashMap<>();
-        mapTemplate.put("Category","");
-        mapTemplate.put("Body","");
-        mapTemplate.put("Link","");
+    private HashMap<String,Object> getNewMap() {
+        HashMap<String, Object> mapTemplate = new HashMap<>();
+        mapTemplate.put("Category", "");
+        mapTemplate.put("Body", "");
+        mapTemplate.put("Link", "");
         return mapTemplate;
     }
-    private String getUnusedId(String target){
-        return "null";
-    }
 
-    private void writeToDB(HashMap<String,Object> map){
+    private void writeGameToDB(HashMap<String,Object> map){
         //writing to the database
         writesLeft ++;
-        FirebaseDatabase.getInstance().getReference().child("deals").child(getUnusedId("deals")).updateChildren(map, new DatabaseReference.CompletionListener() {
+        String key = FirebaseDatabase.getInstance().getReference().child("deals").push().getKey();
+        FirebaseDatabase.getInstance().getReference().child("deals").child(key).updateChildren(map, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                System.out.println("completed" + databaseError + databaseReference);
+                System.out.println("completed" + databaseReference.getKey());
                 writesLeft --;
             }
         });
@@ -75,7 +69,7 @@ public class FireBaseManager {
                 currType ++;
                 if(currType > 2) {
                     currType = 0;
-                    writeToDB(mapTemplate);
+                    writeGameToDB(mapTemplate);
                     mapTemplate = getNewMap();
                 }
             }
@@ -86,7 +80,7 @@ public class FireBaseManager {
             e.printStackTrace();
         }
         while(writesLeft > 0 ){
-            
+            //wait for the writes to be completed
         }
     }
 }
