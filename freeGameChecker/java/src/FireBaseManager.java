@@ -43,10 +43,32 @@ public class FireBaseManager {
         FirebaseDatabase.getInstance().getReference().child("deals").child(key).updateChildren(map, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                System.out.println("completed" + databaseReference.getKey());
-                writesLeft --;
+                addGamesToUsers(databaseReference.getKey());
+
             }
         });
+    }
+
+    private String[] getUserIds(){
+        return new String[]{"1","2"};
+    }
+
+    private void addGamesToUsers(String gameKey){
+        String[] users = getUserIds();
+        for(String user: users) {
+            writesLeft ++;
+            HashMap<String, Object> map = new HashMap<>(2);
+            map.put("dealId", gameKey);
+            map.put("userId", user);
+            String key = FirebaseDatabase.getInstance().getReference().child("unseenDeals").push().getKey();
+            FirebaseDatabase.getInstance().getReference().child("unseenDeals").child(key).updateChildren(map, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    writesLeft --;
+                }
+            });
+        }
+        writesLeft --;
     }
 
     public void pushFromDump(){
