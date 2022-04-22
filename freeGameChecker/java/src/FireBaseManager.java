@@ -6,12 +6,15 @@ import com.google.firebase.database.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 
 public class FireBaseManager {
     private volatile int writesLeft = 0;
+    private volatile ArrayList<String> users = new ArrayList<>(5); //capacity is just a random guess
+    private volatile  boolean finishedLoadingUsers = false;
     public FireBaseManager(){
         try{
             // Fetch the service account key JSON file contents
@@ -23,6 +26,8 @@ public class FireBaseManager {
                     .build();
 
             FirebaseApp.initializeApp(options);
+
+            loadUserIds();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -49,12 +54,36 @@ public class FireBaseManager {
         });
     }
 
-    private String[] getUserIds(){
-        return new String[]{"1","2"};
+    private void loadUserIds(){
+        DatabaseReference collection = FirebaseDatabase.getInstance().getReference().child("users");
+        Query query = collection.orderByKey();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> snaps = dataSnapshot.getChildren();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    users.add(snapshot.getKey());
+                }
+                finishedLoadingUsers = true;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Failed to get from database");
+                finishedLoadingUsers = true;
+            }
+        });
     }
 
     private void addGamesToUsers(String gameKey){
-        String[] users = getUserIds();
+        while(!finishedLoadingUsers){
+            try {
+                Thread.sleep(10);
+            }
+            catch (Exception e){
+                System.out.println("Failed to sleep");
+            }
+        }
         for(String user: users) {
             writesLeft ++;
             HashMap<String, Object> map = new HashMap<>(2);
