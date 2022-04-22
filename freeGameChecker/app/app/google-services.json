@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "693737857590",
+    "firebase_url": "https://notifier-bc85e-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "notifier-bc85e",
+    "storage_bucket": "notifier-bc85e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693737857590:android:dadeb36a355f60c652ae97",
+        "android_client_info": {
+          "package_name": "wardgeronimussmets.Notifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693737857590-53e078v1eroh9u7c86sn9sc9v5purts1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS6JAUJfLqabPkuOD9S77ATVBVxyqbbzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "693737857590-53e078v1eroh9u7c86sn9sc9v5purts1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
