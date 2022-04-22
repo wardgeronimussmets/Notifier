@@ -72,7 +72,6 @@ def checkSubmission(submission):
 def getFromReddit():
     freeGames = []
     lastCheckTime = loadUTC()
-    print(lastCheckTime)
     reddit = praw.Reddit(client_id="KrKvK25tPXyhsuYKURx4aA", client_secret="WFLyQT2FYaVau7pDTUwlKCupDF2wqQ",
                          user_agent="python:praw:gameDealsParser (by /u/dewarden)")
     reddit.read_only = True
@@ -90,55 +89,15 @@ def getFromReddit():
     print("There were new submissions that haven't been checked yet")
     return freeGames
 
-def getCategoryBodyText(category):
-    return "[" + str(category).upper() + "]\n"
 
-def getRestBodyText(title,link):
-    return title + "\nLink: https://www.reddit.com" + link + "\n"
-
-def buildMailBody(freeGames):
-    body = ""
-    cat = ""
-    for game in freeGames:
-        body += getCategoryBodyText(game.cat)
-        if not cat.__eq__(game.cat):
-            cat = game.cat
-            body += getCategoryBodyText(game.cat)
-        body += getRestBodyText(game.title,game.reddit)
-    return body
 def sendGames(freeGames):
-    port = 465  # For SSL
-    password = ""
-    with open(passwordPickle, 'rb+') as pick:
-        try:
-            password = pickle.load(pick)
-        except EOFError:
-            password = input("Please insert the password of the email markelgamedeals@gmail.com")
-            with open(path+passwordPickle,'wb') as pick2:
-                pickle.dump(password,pick2)
-
     freeGames.sort(key=lambda x: sort_order.get(x.cat,len(sort_order)))
-    body = buildMailBody(freeGames)
-    # Create a secure SSL context
-    context = ssl.create_default_context()
-    message = """\
-    Subject: Free games update [GameDeals]
-    Well hello there,
-    There have been some changes on the GameDeals subreddit.""" + body
-    print(message)
-
-    file = open(path+"dump.txt","a+")
-    file.write(body)
+    file = open(path + "dump.txt", "a+")
+    for free_game in freeGames:
+        file.write(free_game.cat+"\n")
+        file.write(free_game.title+"\n")
+        file.write("https://www.reddit.com"+free_game.reddit+"\n")
     file.close()
-
-
-    # with smtplib.SMTP(smtp_server, port) as server:
-    #     server.login(sender_email, password)
-    #     server.ehlo()  # Can be omitted
-    #     server.starttls(context=context)
-    #     server.ehlo()  # Can be omitted
-    #     server.login(sender_email, password)
-    #     server.sendmail(sender_email, receiver_email, message)
 
 def main():
     #changeStdOut()
@@ -149,7 +108,8 @@ def main():
 
 
 main()
-
+time.sleep(1)#make sure that the dump.txt is properly closed
+print("Python is exiting...")
 exit(0)
 
 # docs: https://praw.readthedocs.io/en/stable/code_overview/models/submission.html?highlight=submission#praw.models.Submission
