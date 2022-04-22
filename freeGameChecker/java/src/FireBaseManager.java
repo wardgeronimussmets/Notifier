@@ -13,10 +13,12 @@ public class FireBaseManager {
     private volatile int writesLeft = 0;
     private volatile ArrayList<String> users = new ArrayList<>(5); //capacity is just a random guess
     private volatile  boolean finishedLoadingUsers = false;
+    private final String privateKey = "./privateKeyFirebase.json";
+    private  final String dumpFile = "./dump.txt";
     public FireBaseManager(){
         try{
             // Fetch the service account key JSON file contents
-            FileInputStream serviceAccount = new FileInputStream("privateKeyFirebase.json");
+            FileInputStream serviceAccount = new FileInputStream(privateKey);
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -100,7 +102,7 @@ public class FireBaseManager {
 
     public void pushFromDump(){
         try {
-            BufferedReader file = new BufferedReader(new FileReader("dump.txt"));
+            BufferedReader file = new BufferedReader(new FileReader(dumpFile));
             Scanner scanner = new Scanner(file);
             HashMap<String,Object> mapTemplate = getNewMap();
             int currType = 0; //0 = category, 1 = body, 2 = link
@@ -138,7 +140,7 @@ public class FireBaseManager {
     private void clearDump(){
         try {
 
-            File file = new File("dump.txt");
+            File file = new File(dumpFile);
             PrintWriter writer = new PrintWriter(file);
             writer.print("");
             writer.close();
