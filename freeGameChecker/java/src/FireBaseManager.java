@@ -121,7 +121,9 @@ public class FireBaseManager {
                 if(currType > 2) {
                     currType = 0;
                     writeGameToDB(mapTemplate);
+                    System.out.println("Writing "+ mapTemplate.values() + " to database");
                     mapTemplate = getNewMap();
+
                 }
             }
 

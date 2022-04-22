@@ -7,12 +7,8 @@ import os
 import sys
 
 pickleFile = "myPickleFile.pk"
-passwordPickle = "passwordPickle.pk"
-sender_email = "markelgamedeals@gmail.com"
-receiver_email = "dirkdedekenmcr@gmail.com"
-smtp_server = "smtp.gmail.com"
 sort_order = {"Steam":0,"Epic Games":1}
-path = ""#os.path.dirname(__file__) + "/"
+path = os.getcwd() + "/"
 
 class freeGame:
     def __init__(self, category, title, redditLink):
@@ -27,8 +23,7 @@ def changeStdOut():
 
 def storeUTC():
     with open(path+pickleFile, 'wb+') as pick:
-        pickle.dump(0, pick)
-        # pickle.dump(int(time.time()), pick)
+        pickle.dump(int(time.time()), pick)
     return
 
 
@@ -72,6 +67,7 @@ def checkSubmission(submission):
 def getFromReddit():
     freeGames = []
     lastCheckTime = loadUTC()
+    wereChanges = False
     reddit = praw.Reddit(client_id="KrKvK25tPXyhsuYKURx4aA", client_secret="WFLyQT2FYaVau7pDTUwlKCupDF2wqQ",
                          user_agent="python:praw:gameDealsParser (by /u/dewarden)")
     reddit.read_only = True
@@ -81,9 +77,13 @@ def getFromReddit():
             game = checkSubmission(submissions)
             if game is not None:
                 freeGames.append(game)
+                wereChanges = True
         else:
             # checked all new ones
-            print("Checked all the new ones")
+            if wereChanges:
+                print("Checked all the new ones")
+            else:
+                print("No new games were found")
             return freeGames
     # stopped checking because passed limit
     print("There were new submissions that haven't been checked yet")
@@ -97,10 +97,11 @@ def sendGames(freeGames):
         file.write(free_game.cat+"\n")
         file.write(free_game.title+"\n")
         file.write("https://www.reddit.com"+free_game.reddit+"\n")
+        print("found: " + free_game.cat + "" + free_game.title + "https://www.reddit.com"+free_game.reddit+"\n")
     file.close()
 
 def main():
-    #changeStdOut()
+    changeStdOut()
     freeGames = getFromReddit()
     storeUTC()
     sendGames(freeGames)
@@ -108,7 +109,7 @@ def main():
 
 
 main()
-time.sleep(1)#make sure that the dump.txt is properly closed
+time.sleep(0.5)#make sure that the dump.txt is properly closed
 print("Python is exiting...")
 exit(0)
 
