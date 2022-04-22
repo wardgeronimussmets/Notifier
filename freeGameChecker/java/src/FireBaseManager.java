@@ -3,9 +3,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -125,6 +123,9 @@ public class FireBaseManager {
                 }
             }
 
+            //finished reading
+            clearDump();
+
 
         }
         catch(Exception e){
@@ -133,5 +134,18 @@ public class FireBaseManager {
         while(writesLeft > 0 ){
             //wait for the writes to be completed
         }
+    }
+    private void clearDump(){
+        try {
+
+            File file = new File("dump.txt");
+            PrintWriter writer = new PrintWriter(file);
+            writer.print("");
+            writer.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
