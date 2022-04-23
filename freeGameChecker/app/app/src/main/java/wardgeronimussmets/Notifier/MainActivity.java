@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ConditionVariable;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String checkAccount(){
+
+
+    private void checkAccount(){
         String user = new SharedLoader(getApplicationContext()).getUserName();
         if(user == null){
             Intent intent = new Intent(getApplicationContext(),NewUserActivity.class);
@@ -28,8 +30,10 @@ public class MainActivity extends AppCompatActivity {
         else{
             System.out.println(user);
         }
-        return user;
+        Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+        startActivity(intent);
     }
+
 
 
 }

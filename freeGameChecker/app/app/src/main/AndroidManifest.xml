@@ -21,6 +21,8 @@
         <activity android:name=".NewUserActivity">
 
         </activity>
+        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".GameDealsActivity"></activity>
     </application>
 
 </manifest>

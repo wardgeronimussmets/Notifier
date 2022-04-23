@@ -10,6 +10,11 @@ public class SharedLoader {
     public SharedLoader(Context context){
         userData = context.getSharedPreferences("userData",MODE_PRIVATE);
     }
+    public void forceUserKey(String forcedKey){
+        SharedPreferences.Editor editor = userData.edit();
+        editor.putString("userKey",forcedKey);
+        editor.apply();
+    }
 
     public String getUserName(){
         return userData.getString("userKey",null);

@@ -24,5 +24,7 @@ public class NewUserActivity extends AppCompatActivity {
         FireBaseManager fireBaseManager = new FireBaseManager();
         String userKey = fireBaseManager.createNewUser(txtUserName.getText().toString());
         new SharedLoader(getApplicationContext()).putNewUser(userKey);
+        Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+        startActivity(intent);
     }
 }
