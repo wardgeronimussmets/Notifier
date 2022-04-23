@@ -50,7 +50,6 @@ public class FireBaseGameDealsGetter {
         database.child("deals").child(gameId.toString()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.v("Markel",gameId.toString() + "number of tasks = "+ Integer.toString(numberOfTasks));
                 GameDeal deal = dataSnapshot.getValue(GameDeal.class);
                 gameDeals.add(deal);
                 numberOfTasks --;

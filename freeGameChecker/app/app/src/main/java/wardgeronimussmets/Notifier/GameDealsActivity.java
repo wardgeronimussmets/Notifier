@@ -6,15 +6,21 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameDealsActivity extends AppCompatActivity implements GameDealsReturner {
     private FireBaseManager fireBaseManager;
+    private RecyclerView recyclerView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_deals);
+        recyclerView = findViewById(R.id.gameRecycler);
         fireBaseManager = new FireBaseManager();
         loadGameNotifications();
     }
@@ -31,13 +37,15 @@ public class GameDealsActivity extends AppCompatActivity implements GameDealsRet
             Toast.makeText(getApplicationContext(),"No new games",Toast.LENGTH_LONG).show();
         }
         else{
-            for(GameDeal deal: deals){
-                if(deal == null || deal.getBody() == null){
-                    Log.v("Markel","Deals is null");
-                }
-                else
-                    Log.v("Markel",deal.getBody());
-            }
+            setAdapter(deals);
         }
+    }
+
+    private void setAdapter(ArrayList<GameDeal> gameDeals){
+        MyRecyclerAdapter adapter = new MyRecyclerAdapter(gameDeals,getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
     }
 }
