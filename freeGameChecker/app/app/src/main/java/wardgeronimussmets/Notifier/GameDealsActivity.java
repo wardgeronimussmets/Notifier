@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class GameDealsActivity extends AppCompatActivity implements GameDealsReturner {
+public class GameDealsActivity extends AppCompatActivity implements GameDealsReturner,GameCategoryRemoverInterface {
     private FireBaseManager fireBaseManager;
     private RecyclerView recyclerView;
+    private MyRecyclerAdapter adapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +43,20 @@ public class GameDealsActivity extends AppCompatActivity implements GameDealsRet
     }
 
     private void setAdapter(ArrayList<GameDeal> gameDeals){
-        MyRecyclerAdapter adapter = new MyRecyclerAdapter(gameDeals,getApplicationContext());
+        adapter = new MyRecyclerAdapter(gameDeals,this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void notifyAdapterRemoved(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void startFireBaseRemoval(String key) {
+        new FireBaseManager().removeGameDeal(key,new SharedLoader(getApplicationContext()).getUserName());
     }
 }

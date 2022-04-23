@@ -42,4 +42,38 @@ public class FireBaseManager {
         new FireBaseGameDealsGetter(user,returner,database);
     }
 
+    public void removeGameDeal(String gameKey,String user){
+        Log.v("Markel",gameKey);
+        database.child("unseenDeals").orderByChild("dealId").equalTo(gameKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int counter = 0;
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    if(snapshot1.child("userId").getValue().toString().equals(user)){
+                        removeUnseenDeal(snapshot1.getKey());
+                    }
+                    counter ++;
+                }
+                if(snapshot.getChildrenCount() ==1){
+                    //last one -> game can be removed from deals as well
+                    removeDeal(gameKey);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Markel","Failed to retrieve in removeGameDeal with key: " + gameKey + " and user: " + user);
+            }
+        });
+
+    }
+
+    private void removeUnseenDeal(String unseenKey){
+        database.child("unseenDeals").child(unseenKey).removeValue();
+        Log.v("Markel","We will try to remove the following key " + unseenKey);
+    }
+    private void removeDeal(String gameKey){
+        database.child("deals").child(gameKey).removeValue();
+        Log.v("Markel","Trying to remove the following key " + gameKey);
+    }
 }

@@ -28,8 +28,6 @@ public class FireBaseGameDealsGetter {
         database.child("unseenDeals").orderByChild("userId").equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<GameDeal> deals = new ArrayList<>();
-
                 Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
                 while(iterator.hasNext()){
                     numberOfTasks ++;
@@ -51,6 +49,7 @@ public class FireBaseGameDealsGetter {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 GameDeal deal = dataSnapshot.getValue(GameDeal.class);
+                deal.setGameId(dataSnapshot.getKey());
                 gameDeals.add(deal);
                 numberOfTasks --;
                 if(numberOfTasks <= 0){

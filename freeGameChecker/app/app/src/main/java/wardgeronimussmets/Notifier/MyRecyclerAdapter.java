@@ -1,9 +1,7 @@
 package wardgeronimussmets.Notifier;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,10 +16,10 @@ import java.util.Comparator;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder> {
     private ArrayList<GameDealCategory> gameCategoryList;
-    private Context context;
+    private GameCategoryRemoverInterface callbackParent;
 
-    public MyRecyclerAdapter(ArrayList<GameDeal> gamesList,Context context){
-        this.context = context;
+    public MyRecyclerAdapter(ArrayList<GameDeal> gamesList,GameCategoryRemoverInterface callbackParent){
+        this.callbackParent = callbackParent;
         gameCategoryList = new ArrayList<>();
         String category = "";
         int index = -1;
@@ -75,7 +73,15 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.v("Markel","We would like to remove " + deal.getBody());
+
+                    holder.linearLayout.removeView(gameView);
+                    callbackParent.startFireBaseRemoval(deal.getGameId());
+                    gameCategoryList.get(holder.getAdapterPosition()).getGameDeals().remove(deal);
+                    if(holder.linearLayout.getChildCount() == 0){
+                        gameCategoryList.remove(holder.getAdapterPosition());
+                        callbackParent.notifyAdapterRemoved(holder.getAdapterPosition());
+                    }
+
                 }
             });
             holder.linearLayout.addView(gameView);

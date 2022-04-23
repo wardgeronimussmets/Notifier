@@ -4,6 +4,7 @@ public class GameDeal {
     private String Category;
     private String Body;
     private String Link;
+    private String gameId;
 
     private GameDeal(){}
 
@@ -35,5 +36,13 @@ public class GameDeal {
 
     public void setLink(String link) {
         this.Link = link;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 }
