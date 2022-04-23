@@ -2,7 +2,8 @@ package wardgeronimussmets.Notifier;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,24 +11,35 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameDealsActivity extends AppCompatActivity implements GameDealsReturner,GameCategoryRemoverInterface {
     private FireBaseManager fireBaseManager;
     private RecyclerView recyclerView;
     private MyRecyclerAdapter adapter;
+    private TextView no_games;
+    private TextView no_games_rather;
+    private TextView no_games_quote;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_deals);
         recyclerView = findViewById(R.id.gameRecycler);
+        no_games = findViewById(R.id.no_games_tv);
+        no_games_rather = findViewById(R.id.no_games_tv_rather);
+        no_games_quote = findViewById(R.id.no_games_tv_quote);
+        no_games.setVisibility(View.GONE);
+        no_games_quote.setVisibility(View.GONE);
+        no_games_rather.setVisibility(View.GONE);
         fireBaseManager = new FireBaseManager();
-        loadGameNotifications();
+
+
+        String user = new SharedLoader(getApplicationContext()).getUserName();
+        setupNotifications();
+        loadGameDeals(user);
     }
 
-    private void loadGameNotifications(){
-        String user = new SharedLoader(getApplicationContext()).getUserName();
+    private void loadGameDeals(String user){
         fireBaseManager.getGameDeals(user,this);
     }
 
@@ -35,7 +47,9 @@ public class GameDealsActivity extends AppCompatActivity implements GameDealsRet
     @Override
     public void returnDeals(ArrayList<GameDeal> deals) {
         if(deals == null){
-            Toast.makeText(getApplicationContext(),"No new games",Toast.LENGTH_LONG).show();
+            no_games.setVisibility(View.VISIBLE);
+            no_games_quote.setVisibility(View.VISIBLE);
+            no_games_rather.setVisibility(View.VISIBLE);
         }
         else{
             setAdapter(deals);
@@ -59,4 +73,12 @@ public class GameDealsActivity extends AppCompatActivity implements GameDealsRet
     public void startFireBaseRemoval(String key) {
         new FireBaseManager().removeGameDeal(key,new SharedLoader(getApplicationContext()).getUserName());
     }
+
+    private void setupNotifications(){
+        if(!(new SharedLoader(getApplicationContext()).isGameDealsNotificationsRunning())){
+            //notifications have to be started
+            fireBaseManager.startGameTracking();
+        }
+    }
+
 }

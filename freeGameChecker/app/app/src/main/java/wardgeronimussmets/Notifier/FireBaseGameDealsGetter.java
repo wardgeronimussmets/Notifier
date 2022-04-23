@@ -28,6 +28,11 @@ public class FireBaseGameDealsGetter {
         database.child("unseenDeals").orderByChild("userId").equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount() == 0){
+                    //no new games
+                    gameDealsReturner.returnDeals(null);
+                    return;
+                }
                 Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
                 while(iterator.hasNext()){
                     numberOfTasks ++;

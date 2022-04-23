@@ -21,8 +21,11 @@
         <activity android:name=".NewUserActivity">
 
         </activity>
-        <activity android:name=".HomeActivity"></activity>
-        <activity android:name=".GameDealsActivity"></activity>
+        <activity android:name=".HomeActivity"
+            android:label="Select app"></activity>
+        <activity android:name=".GameDealsActivity"
+            android:label="r/GameDeals">
+        </activity>
     </application>
 
 </manifest>

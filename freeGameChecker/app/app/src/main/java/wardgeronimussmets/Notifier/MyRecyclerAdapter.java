@@ -98,7 +98,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         deals.sort(new Comparator<GameDeal>() {
             @Override
             public int compare(GameDeal gameDeal, GameDeal t1) { //negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
-                return mapCategoryToInt(gameDeal.getCategory()) - mapCategoryToInt(t1.getCategory());
+                int result = mapCategoryToInt(gameDeal.getCategory()) - mapCategoryToInt(t1.getCategory());
+                if(result == 0){
+                    return (gameDeal.getCategory().compareToIgnoreCase(t1.getCategory()));
+                }
+                else return result;
             }
         });
         return deals;

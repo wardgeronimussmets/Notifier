@@ -76,4 +76,17 @@ public class FireBaseManager {
         database.child("deals").child(gameKey).removeValue();
         Log.v("Markel","Trying to remove the following key " + gameKey);
     }
+    public void startGameTracking(){
+        database.child("deals").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.v("Markel",snapshot.toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 }
