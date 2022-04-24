@@ -23,14 +23,18 @@ def changeStdOut():
 
 def storeUTC():
     with open(path+pickleFile, 'wb+') as pick:
-        pickle.dump(int(time.time()), pick)
+        pickle.dump(int(time.time()-1), pick)
+        pick.close()
     return
 
 
 def loadUTC():
     with open(path+pickleFile, 'rb+') as pick:
         try:
-            return pickle.load(pick)
+            time = pickle.load(pick)
+            pick.close()
+            storeUTC()
+            return time
         except EOFError:
             return 0
 
@@ -103,7 +107,6 @@ def sendGames(freeGames):
 def main():
     changeStdOut()
     freeGames = getFromReddit()
-    storeUTC()
     sendGames(freeGames)
     return
 
