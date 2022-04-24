@@ -21,11 +21,15 @@
         <activity android:name=".NewUserActivity">
 
         </activity>
-        <activity android:name=".HomeActivity"
-            android:label="Select app"></activity>
+        <activity
+            android:name=".HomeActivity"
+            android:label="Select app" />
         <activity android:name=".GameDealsActivity"
             android:label="r/GameDeals">
         </activity>
+
+        <service android:name=".MyService"
+            android:exported="false"/>
     </application>
 
 </manifest>

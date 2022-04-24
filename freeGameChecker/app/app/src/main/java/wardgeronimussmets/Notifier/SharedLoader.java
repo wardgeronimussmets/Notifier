@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class SharedLoader {
     private SharedPreferences userData;
@@ -36,7 +37,7 @@ public class SharedLoader {
 
     public boolean isGameDealsNotificationsRunning(){
         SharedPreferences pref = getGameDealsData();
-        if(pref.getBoolean(notificationKey,false)){
+        if(!pref.getBoolean(notificationKey,false)){
             //have to still load them
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean(notificationKey,true);
@@ -48,6 +49,13 @@ public class SharedLoader {
         }
 
     }
+
+//    public void forceNoNotificationsYet(){
+//        SharedPreferences pref = getGameDealsData();
+//        SharedPreferences.Editor editor = pref.edit();
+//        editor.putBoolean(notificationKey,false);
+//        editor.apply();
+//    }
 
 
 }

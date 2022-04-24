@@ -1,5 +1,6 @@
 package wardgeronimussmets.Notifier;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -75,10 +76,21 @@ public class GameDealsActivity extends AppCompatActivity implements GameDealsRet
     }
 
     private void setupNotifications(){
-        if(!(new SharedLoader(getApplicationContext()).isGameDealsNotificationsRunning())){
-            //notifications have to be started
-            fireBaseManager.startGameTracking();
-        }
+        new SharedLoader(getApplicationContext()).isGameDealsNotificationsRunning(); //makes to true if it ain't yet
+//        try{
+//            stopService(new Intent(getApplicationContext(),MyService.class));
+//
+//        }
+//        catch (Exception e){
+//            Log.v("Markel","Failed to remove service");
+//        }
+        Thread thread = new Thread(){ //start service in new thread
+            @Override
+            public void run() {
+                startService(new Intent(getApplicationContext(),MyService.class));
+            }
+        };
+        thread.start();
     }
 
 }
