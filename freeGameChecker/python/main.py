@@ -21,20 +21,22 @@ def changeStdOut():
     return
 
 
-def storeUTC():
+def storeUTC(curr_time):
     with open(path+pickleFile, 'wb+') as pick:
-        pickle.dump(int(time.time()-1), pick)
+        pickle.dump(int(curr_time), pick)
         pick.close()
     return
 
 
 def loadUTC():
+    current_time = time.time()-1
+
     with open(path+pickleFile, 'rb+') as pick:
         try:
-            time = pickle.load(pick)
+            new_time = pickle.load(pick)
             pick.close()
-            storeUTC()
-            return time
+            storeUTC(current_time)
+            return new_time
         except EOFError:
             return 0
 
