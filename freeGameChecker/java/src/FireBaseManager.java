@@ -113,6 +113,7 @@ public class FireBaseManager {
             Scanner scanner = new Scanner(file);
             HashMap<String,Object> mapTemplate = getNewMap();
             int currType = 0; //0 = category, 1 = body, 2 = link
+            boolean newInfo = scanner.hasNextLine();
             while(scanner.hasNext()){
                 String next = scanner.nextLine();
                 if(currType == 0){
@@ -134,8 +135,8 @@ public class FireBaseManager {
                 }
             }
             //send all received games via email
-            emailManager.sendMessage();
-
+            if(newInfo)
+                emailManager.sendMessage();
             //finished reading
             clearDump();
 
