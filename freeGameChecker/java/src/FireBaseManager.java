@@ -4,6 +4,8 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -142,8 +144,19 @@ public class FireBaseManager {
         catch(Exception e){
             e.printStackTrace();
         }
+        Instant start = Instant.now();
         while(writesLeft > 0 ){
             //wait for the writes to be completed
+            try{
+                Thread.sleep(1000);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            if(Duration.between(start,Instant.now()).compareTo(Duration.ofSeconds(60))>0){ //the comparator value, negative if less, positive if greater
+                System.out.println("Waited for a minute but still no write -> let's just assume everything was written");
+                System.exit(0);
+            }
         }
     }
     private void clearDump(){

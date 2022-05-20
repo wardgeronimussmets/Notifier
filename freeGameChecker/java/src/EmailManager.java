@@ -28,8 +28,6 @@ public class EmailManager {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 String[] user = getUser();
-                System.out.println(user[0]);
-                System.out.println(user[1]);
                 return new PasswordAuthentication(user[0],user[1]);
             }
         });
@@ -48,7 +46,6 @@ public class EmailManager {
                 message.setSubject("GameDeals - Hello there, some new deals");
 
                 String msg = generateMailBody();
-                System.out.println(msg);
 
                 MimeBodyPart mimeBodyPart = new MimeBodyPart();
                 mimeBodyPart.setContent(msg, "text/plain; charset=utf-8");
@@ -59,6 +56,7 @@ public class EmailManager {
                 message.setContent(multipart);
 
                 Transport.send(message);
+                System.out.println("Sending email to " + emailAdress);
             } catch (Exception e) {
                 e.printStackTrace();
             }
