@@ -15,8 +15,11 @@ public class FireBaseManager {
     private volatile  boolean finishedLoadingUsers = false;
     private final String privateKey = "./privateKeyFirebase.json";
     private  final String dumpFile = "./dump.txt";
+    private EmailManager emailManager ;
     public FireBaseManager(){
         try{
+            //initialize emailManager
+            emailManager = new EmailManager();
             // Fetch the service account key JSON file contents
             FileInputStream serviceAccount = new FileInputStream(privateKey);
 
@@ -42,6 +45,8 @@ public class FireBaseManager {
     }
 
     private void writeGameToDB(HashMap<String,Object> map){
+        //writing to email
+        emailManager.appendMessage(map);
         //writing to the database
         writesLeft ++;
         String key = FirebaseDatabase.getInstance().getReference().child("deals").push().getKey();
@@ -126,6 +131,8 @@ public class FireBaseManager {
 
                 }
             }
+            //send all received games via email
+            emailManager.sendMessage();
 
             //finished reading
             clearDump();
