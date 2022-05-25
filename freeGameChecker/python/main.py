@@ -59,6 +59,8 @@ def containsException(target):
 def checkSubmission(submission):
     # get category
     s = str(submission.title)
+    s = s.lower()
+    s = s.replace("free demo","")
     if s.__contains__("Free") or s.__contains__("FREE") or s.__contains__("free") or s.__contains__("100%"):
         if containsException(s):
             return None
